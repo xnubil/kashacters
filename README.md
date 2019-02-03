@@ -28,6 +28,8 @@ local IdentifierTables = {
 
 ## Credits
 
-> ESX Framework and **KASH** for creating the resource. You can do whatever the f with it what you want but it is nice to give the main man credits ;)
+> ESX Framework and **KASH** AND **ONNO#2219** for creating the resource. You can do whatever the f with it what you want but it is nice to give the main man credits ;)
 
 - LOVE KASH (Discord: KASH#0205)
+
+FOR FULL SUPPORT ADD **ONNO#2219** ON DISCORD AND PM QUESTIONS
