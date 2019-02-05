@@ -26,6 +26,10 @@ local IdentifierTables = {
 ```
 > **Pay ATTENTION: You have to call the resource 'esx_kashacters' in order for the javascript to work!!!**
 
+## How it works
+> What this script does it manipulates ESX for loading characters
+So when you are choosing your character it changes your steam id which is normally steam: to Char: this prevents ESX from loading another character because it is looking for you exact steamid. So when you choose your character it will change it from Char: to your normal steam id (steam:). When creating a new character it will spawn you without an exact steamid which creates a new database entry for your steamid
+
 ## Credits
 
 > ESX Framework and **KASH** AND **Onno204** for creating the resource. You can do whatever the f with it what you want but it is nice to give the main man credits ;)
