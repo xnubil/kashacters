@@ -4,9 +4,9 @@
 
 > I've seen a lot of request to have ESX Multi Character, while working on my own framework I've made it multiple times and wanted to try it out with ESX. I tried to edit as less possible to the core of essentialmode or es_extended and it worked well :) PS. just don't mind the name...
 
-## Code Samples
+## Support
 
-> You can edit it all you want, this release is not my main priority for coding so support for this will be limited but if you have any questions just send a message to **KASH#0205** on Discord (you  might need to add me first).
+> Because of the many questions I get that are different from the script I've decided to **not support** any not esx_kashacters script. Many errors are caused because of another script which might have something like 'playerJoined' as an event. There are too many different ESX scripts installed for different servers so I can't help everyone.
 
 ## Installation
 
@@ -35,5 +35,3 @@ So when you are choosing your character it changes your steam id which is normal
 > ESX Framework and **KASH** AND **Onno204** for creating the resource. You can do whatever the f with it what you want but it is nice to give the main man credits ;)
 
 - LOVE KASH (Discord: KASH#0205)
-
-FOR FULL SUPPORT ADD **onno204#2219** ON DISCORD AND PM QUESTIONS
