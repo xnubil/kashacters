@@ -16,17 +16,17 @@
 - import the sql file in your database
 - Go to *essentialmode\client\main.lua* and edit/comment the code.
 ```
---Citizen.CreateThread(function()
-	--while true do
-		--Citizen.Wait(0)
+--[[Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(0)
 
-		--if NetworkIsSessionStarted() then
-			--TriggerServerEvent('es:firstJoinProper')
-			--TriggerEvent('es:allowedToSpawn')
-			--return
-		--end
-	--end
---end)
+		if NetworkIsSessionStarted() then
+			TriggerServerEvent('es:firstJoinProper')
+			TriggerEvent('es:allowedToSpawn')
+			return
+		end
+	end
+end)]]--
 ```
 - Now we edit the table and add all our identifier to make sure our character loads.
 - *Edit the code in esx_kashacters\server\main.lua*
