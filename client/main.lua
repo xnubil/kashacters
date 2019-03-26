@@ -5,12 +5,19 @@ Citizen.CreateThread(function()
         TriggerEvent('esx:getSharedObject', function (obj) ESX = obj end)
     end
 end)
+
+-- This Code Was changed to fix error With player spawner as default --
+-- Link to the post with the error fix --
+-- https://forum.fivem.net/t/release-esx-kashacters-multi-character/251613/316?u=xxfri3ndlyxx --
 Citizen.CreateThread(function()
-    Citizen.Wait(7)
-    if NetworkIsSessionStarted() then
-        Citizen.Wait(100)
-        TriggerServerEvent("kashactersS:SetupCharacters")
-        TriggerEvent("kashactersC:SetupCharacters")
+    while true do
+        Citizen.Wait(0)
+        if NetworkIsSessionStarted() then
+            Citizen.Wait(100)
+            TriggerServerEvent("kashactersS:SetupCharacters")
+            TriggerEvent("kashactersC:SetupCharacters")
+            return -- break the loop
+        end
     end
 end)
 
