@@ -11,6 +11,8 @@
 ## Installation
 **_How to install instruction._ Created By XxFri3ndlyxX**
 
+**_How to install instruction._**
+
 - Download the resource
 - Rename the resource to esx_kashacters
 - import the sql file in your database
@@ -55,17 +57,43 @@ Replace columnNameHere with owner then redo it with identifier
 Credit @Xnubil for this query line 
 
 
-The table list provided is just an example. Yours may difer depending on what you install on your server.
+The table list provided is just an example. Yours may differ depending on what you install on your server.
 
 Once You've done all that. add start esx_kashacters to your server.cfg and then start your server.
 If it's not working you can try clearing your cache. Now when the ui pops in. You see 4 square. If you click on one then the play or delete show on the left.  Okay hope this helps you guys get this awesome script going on your server.
 
-@KASH maybe you can add this to the op :)
+Fix For Error related to recent FiveM Update. Fix by @niobium Link[Link to his Error Fix Post ](https://forum.fivem.net/t/release-esx-kashacters-multi-character/251613/316?u=xxfri3ndlyxx) 
+To fix the error:
+Find in client/main.lua
+```
+Citizen.CreateThread(function()
+Citizen.Wait(7)
+if NetworkIsSessionStarted() then
+    Citizen.Wait(100)
+    TriggerServerEvent("kashactersS:SetupCharacters")
+    TriggerEvent("kashactersC:SetupCharacters")
+end
+end)
+```
+Then change it to 
+```
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(0)
+        if NetworkIsSessionStarted() then
+            Citizen.Wait(100)
+            TriggerServerEvent("kashactersS:SetupCharacters")
+            TriggerEvent("kashactersC:SetupCharacters")
+            return -- break the loop
+        end
+    end
+end)
+```
 
+Fix for ambulance updated by 
+[Link To His Ambulance Fix Post](https://forum.fivem.net/t/release-esx-kashacters-multi-character/251613/315?u=xxfri3ndlyxx)
 
-**Fix for esx_ambulancejob**  Credit to @OfficialRobin for this fix 
-
-Open esx_ambulancejob/client/main.lua
+In  stock esx_ambulancejob/client/main.lua lines 43 - 61
 Find 
 ```
 AddEventHandler('playerSpawned', function()
@@ -88,11 +116,9 @@ AddEventHandler('playerSpawned', function()
 	end
 end)
 ```
-and just under the last end) 
-add
+Then change it to 
 ```
-RegisterNetEvent('esx_ambulancejob:multicharacter')
-AddEventHandler('esx_ambulancejob:multicharacter', function()
+addEventHandler('playerSpawned', function()
 	IsDead = false
 
 	if FirstSpawn then
@@ -111,11 +137,30 @@ AddEventHandler('esx_ambulancejob:multicharacter', function()
 		end)
 	end
 end)
+RegisterNetEvent('esx_ambulancejob:multicharacter')
+AddEventHandler('esx_ambulancejob:multicharacter', function()
+	IsDead = false
+	exports.spawnmanager:setAutoSpawn(false) -- disable respawn
+	FirstSpawn = false
+
+	ESX.TriggerServerCallback('esx_ambulancejob:getDeathStatus', function(isDead)
+		if isDead and Config.AntiCombatLog then
+			while not PlayerLoaded do
+				Citizen.Wait(1000)
+			end
+
+			ESX.ShowNotification(_U('combatlog_message'))
+			RemoveItemsAfterRPDeath()
+		end
+	end)
+end)
 ```
+Next make sure you trigger esx_ambulancejob:multicharacter in esx_kashacters/client/main.lua
 
-Then go to esx_kashacters/client/main.lua
-Find 
+TriggerEvent('esx_ambulancejob:multicharacter')
 
+In esx_kashacters/client/main.lua lines 53 - 81
+Find
 ```
 RegisterNetEvent('kashactersC:SpawnCharacter')
 AddEventHandler('kashactersC:SpawnCharacter', function(spawn)
@@ -130,6 +175,7 @@ AddEventHandler('kashactersC:SpawnCharacter', function(spawn)
     PointCamAtCoord(cam2, pos.x,pos.y,pos.z+200)
     SetCamActiveWithInterp(cam2, cam, 900, true, true)
     Citizen.Wait(900)
+
     cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", pos.x,pos.y,pos.z+200, 300.00,0.00,0.00, 100.00, false, 0)
     PointCamAtCoord(cam, pos.x,pos.y,pos.z+2)
     SetCamActiveWithInterp(cam, cam2, 3700, true, true)
@@ -146,9 +192,7 @@ AddEventHandler('kashactersC:SpawnCharacter', function(spawn)
     DisplayRadar(true)
 end)
 ```
-
-and replace with 
-
+Change it to 
 ```
 RegisterNetEvent('kashactersC:SpawnCharacter')
 AddEventHandler('kashactersC:SpawnCharacter', function(spawn, isnew)
@@ -186,6 +230,45 @@ AddEventHandler('kashactersC:SpawnCharacter', function(spawn, isnew)
     DisplayRadar(true)
 end)
 ```
+I do not recommend this as it will mostly lead to errors.
+Character Switch Feature. Code posted by @Pattzki [Code Link](https://forum.fivem.net/t/release-esx-kashacters-multi-character/251613/298?u=xxfri3ndlyxx)
+ 
+Put this line of code  in client/main.lua
+```
+RegisterCommand('switch', function()
+TriggerEvent('kashactersC:ReloadCharacters')
+end)
+```
+Then a post related to this to fix issue with skin not loading.
+Add the following code in server/main.lua
+```
+RegisterServerEvent(“kashactersS:CharacterChosen”)
+AddEventHandler(‘kashactersS:CharacterChosen’, function(charid, ischar)
+local src = source
+local spawn = {}
+SetLastCharacter(src, tonumber(charid))
+SetCharToIdentifier(GetPlayerIdentifiers(src)[1], tonumber(charid))
+if ischar == “true” then
+spawn = GetSpawnPos(src)
+TriggerClientEvent(“kashactersC:Skinchanger”, src)
+else
+TriggerClientEvent(‘skinchanger:loadDefaultModel’, src, true, cb)
+spawn = { x = -1045.31, y = -2750.69, z = 20.36 } – DEFAULT SPAWN POSITION
+end
+TriggerClientEvent(“kashactersC:SpawnCharacter”, src, spawn)
+end)
+```
+Then add this code in client/main.lua
+```
+RegisterNetEvent(‘kashactersC:Skinchanger’)
+AddEventHandler(‘kashactersC:Skinchanger’, function(source)
+local source_ = source
+ESX.TriggerServerCallback(‘esx_skin:getPlayerSkin’, function(skin, jobSkin)
+TriggerEvent(‘skinchanger:loadSkin’, skin)
+end)
+end)
+```
+This guide has been updated with all the posted fix that was posted after i made my post.
 
 > **Pay ATTENTION: You have to call the resource 'esx_kashacters' in order for the javascript to work!!!**
 
