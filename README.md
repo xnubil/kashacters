@@ -62,12 +62,12 @@ The table list provided is just an example. Yours may differ depending on what y
 Once You've done all that. add start esx_kashacters to your server.cfg and then start your server.
 If it's not working you can try clearing your cache. Now when the ui pops in. You see 4 square. If you click on one then the play or delete show on the left.  Okay hope this helps you guys get this awesome script going on your server.
 
-Fix for ambulance updated by 
-[Link To His Ambulance Fix Post](https://forum.fivem.net/t/release-esx-kashacters-multi-character/251613/315?u=xxfri3ndlyxx)
+The Fix for the ambulance is on the kashacter side is already implemented.  
 <br>
-In  stock esx_ambulancejob/client/main.lua lines 43 - 61
-Find 
+Now all you have to do is go to your ambulance script and 
+comment or delete
 ```
+--[[
 AddEventHandler('playerSpawned', function()
 	IsDead = false
 
@@ -87,121 +87,93 @@ AddEventHandler('playerSpawned', function()
 		end)
 	end
 end)
+]]--
 ```
-Then change it to 
+<br>
+Then add this 
+<br>
 ```
-addEventHandler('playerSpawned', function()
+RegisterNetEvent('esx_ambulancejob:multicharacter')
+AddEventHandler('esx_ambulancejob:multicharacter', function()
 	IsDead = false
-
-	if FirstSpawn then
-		exports.spawnmanager:setAutoSpawn(false) -- disable respawn
-		FirstSpawn = false
 
 		ESX.TriggerServerCallback('esx_ambulancejob:getDeathStatus', function(isDead)
 			if isDead and Config.AntiCombatLog then
-				while not PlayerLoaded do
-					Citizen.Wait(1000)
-				end
-
 				ESX.ShowNotification(_U('combatlog_message'))
 				RemoveItemsAfterRPDeath()
 			end
 		end)
-	end
 end)
-RegisterNetEvent('esx_ambulancejob:multicharacter')
-AddEventHandler('esx_ambulancejob:multicharacter', function()
-	IsDead = false
-	exports.spawnmanager:setAutoSpawn(false) -- disable respawn
-	FirstSpawn = false
+```
+<br>
 
-	ESX.TriggerServerCallback('esx_ambulancejob:getDeathStatus', function(isDead)
-		if isDead and Config.AntiCombatLog then
-			while not PlayerLoaded do
-				Citizen.Wait(1000)
+To fix The datastore duplicated entry download this https://github.com/XxFri3ndlyxX/esx_datastore   
+<br>
+Or  
+<br>
+Add this code to your server/main.lua  
+<br>
+```-- Fix for kashacters duplication entry --
+-- Fix was taken from this link --
+-- https://forum.fivem.net/t/release-esx-kashacters-multi-character/251613/448?u=xxfri3ndlyxx --
+AddEventHandler('esx:playerLoaded', function(source)
+
+  local result = MySQL.Sync.fetchAll('SELECT * FROM datastore')
+
+	for i=1, #result, 1 do
+		local name   = result[i].name
+		local label  = result[i].label
+		local shared = result[i].shared
+
+		local result2 = MySQL.Sync.fetchAll('SELECT * FROM datastore_data WHERE name = @name', {
+			['@name'] = name
+		})
+
+		if shared == 0 then
+
+			table.insert(DataStoresIndex, name)
+			DataStores[name] = {}
+
+			for j=1, #result2, 1 do
+				local storeName  = result2[j].name
+				local storeOwner = result2[j].owner
+				local storeData  = (result2[j].data == nil and {} or json.decode(result2[j].data))
+				local dataStore  = CreateDataStore(storeName, storeOwner, storeData)
+
+				table.insert(DataStores[name], dataStore)
 			end
-
-			ESX.ShowNotification(_U('combatlog_message'))
-			RemoveItemsAfterRPDeath()
 		end
-	end)
+	end
+
+	local _source = source
+	local xPlayer = ESX.GetPlayerFromId(_source)
+  	local dataStores = {}
+  
+	for i=1, #DataStoresIndex, 1 do
+		local name      = DataStoresIndex[i]
+		local dataStore = GetDataStore(name, xPlayer.identifier)
+
+		if dataStore == nil then
+			MySQL.Async.execute('INSERT INTO datastore_data (name, owner, data) VALUES (@name, @owner, @data)',
+			{
+				['@name']  = name,
+				['@owner'] = xPlayer.identifier,
+				['@data']  = '{}'
+			})
+
+			dataStore = CreateDataStore(name, xPlayer.identifier, {})
+			table.insert(DataStores[name], dataStore)
+		end
+
+		table.insert(dataStores, dataStore)
+	end
+
+	xPlayer.set('dataStores', dataStores)
 end)
 ```
-Next make sure you trigger esx_ambulancejob:multicharacter in esx_kashacters/client/main.lua
+<br>
+<br>
 
-TriggerEvent('esx_ambulancejob:multicharacter')
-
-In esx_kashacters/client/main.lua lines 53 - 81
-Find
-```
-RegisterNetEvent('kashactersC:SpawnCharacter')
-AddEventHandler('kashactersC:SpawnCharacter', function(spawn)
-    TriggerServerEvent('es:firstJoinProper')
-    TriggerEvent('es:allowedToSpawn')
-    SetTimecycleModifier('default')
-    local pos = spawn
-    SetEntityCoords(GetPlayerPed(-1), pos.x, pos.y, pos.z)
-    DoScreenFadeIn(500)
-    Citizen.Wait(500)
-    cam2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", -1355.93,-1487.78,520.75, 300.00,0.00,0.00, 100.00, false, 0)
-    PointCamAtCoord(cam2, pos.x,pos.y,pos.z+200)
-    SetCamActiveWithInterp(cam2, cam, 900, true, true)
-    Citizen.Wait(900)
-
-    cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", pos.x,pos.y,pos.z+200, 300.00,0.00,0.00, 100.00, false, 0)
-    PointCamAtCoord(cam, pos.x,pos.y,pos.z+2)
-    SetCamActiveWithInterp(cam, cam2, 3700, true, true)
-    Citizen.Wait(3700)
-    PlaySoundFrontend(-1, "Zoom_Out", "DLC_HEIST_PLANNING_BOARD_SOUNDS", 1)
-    RenderScriptCams(false, true, 500, true, true)
-    PlaySoundFrontend(-1, "CAR_BIKE_WHOOSH", "MP_LOBBY_SOUNDS", 1)
-    FreezeEntityPosition(GetPlayerPed(-1), false)
-    Citizen.Wait(500)
-    SetCamActive(cam, false)
-    DestroyCam(cam, true)
-    IsChoosing = false
-    DisplayHud(true)
-    DisplayRadar(true)
-end)
-```
-Change it to 
-```
-RegisterNetEvent('kashactersC:SpawnCharacter')
-AddEventHandler('kashactersC:SpawnCharacter', function(spawn, isnew)
-    TriggerServerEvent('es:firstJoinProper')
-    TriggerEvent('es:allowedToSpawn')
-    TriggerEvent('esx_ambulancejob:multicharacter')
-
-    SetTimecycleModifier('default')
-    local pos = spawn
-    SetEntityCoords(GetPlayerPed(-1), pos.x, pos.y, pos.z)
-    DoScreenFadeIn(500)
-    Citizen.Wait(500)
-    cam2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", -1355.93,-1487.78,520.75, 300.00,0.00,0.00, 100.00, false, 0)
-    PointCamAtCoord(cam2, pos.x,pos.y,pos.z+200)
-    SetCamActiveWithInterp(cam2, cam, 900, true, true)
-    Citizen.Wait(900)
-	
- if isnew then
-	TriggerEvent('esx_identity:showRegisterIdentity')
- end
-
-    cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", pos.x,pos.y,pos.z+200, 300.00,0.00,0.00, 100.00, false, 0)
-    PointCamAtCoord(cam, pos.x,pos.y,pos.z+2)
-    SetCamActiveWithInterp(cam, cam2, 3700, true, true)
-    Citizen.Wait(3700)
-    PlaySoundFrontend(-1, "Zoom_Out", "DLC_HEIST_PLANNING_BOARD_SOUNDS", 1)
-    RenderScriptCams(false, true, 500, true, true)
-    PlaySoundFrontend(-1, "CAR_BIKE_WHOOSH", "MP_LOBBY_SOUNDS", 1)
-    FreezeEntityPosition(GetPlayerPed(-1), false)
-    Citizen.Wait(500)
-    SetCamActive(cam, false)
-    DestroyCam(cam, true)
-    IsChoosing = false
-    DisplayHud(true)
-    DisplayRadar(true)
-end)
-```
 I do not recommend this as it will mostly lead to errors.
 Character Switch Feature. Code posted by @Pattzki [Code Link](https://forum.fivem.net/t/release-esx-kashacters-multi-character/251613/298?u=xxfri3ndlyxx)
  
