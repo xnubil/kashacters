@@ -58,9 +58,10 @@ AddEventHandler('kashactersC:SetupUI', function(Characters)
 end)
 
 RegisterNetEvent('kashactersC:SpawnCharacter')
-AddEventHandler('kashactersC:SpawnCharacter', function(spawn)
+AddEventHandler('kashactersC:SpawnCharacter', function(spawn, isnew)
     TriggerServerEvent('es:firstJoinProper')
     TriggerEvent('es:allowedToSpawn')
+
     SetTimecycleModifier('default')
     local pos = spawn
     SetEntityCoords(GetPlayerPed(-1), pos.x, pos.y, pos.z)
@@ -70,6 +71,12 @@ AddEventHandler('kashactersC:SpawnCharacter', function(spawn)
     PointCamAtCoord(cam2, pos.x,pos.y,pos.z+200)
     SetCamActiveWithInterp(cam2, cam, 900, true, true)
     Citizen.Wait(900)
+    exports.spawnmanager:setAutoSpawn(false)
+    TriggerEvent('esx_ambulancejob:multicharacter', source)
+	
+ if isnew then
+	TriggerEvent('esx_identity:showRegisterIdentity')
+ end
 
     cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", pos.x,pos.y,pos.z+200, 300.00,0.00,0.00, 100.00, false, 0)
     PointCamAtCoord(cam, pos.x,pos.y,pos.z+2)
