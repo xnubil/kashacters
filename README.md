@@ -62,37 +62,9 @@ The table list provided is just an example. Yours may differ depending on what y
 Once You've done all that. add start esx_kashacters to your server.cfg and then start your server.
 If it's not working you can try clearing your cache. Now when the ui pops in. You see 4 square. If you click on one then the play or delete show on the left.  Okay hope this helps you guys get this awesome script going on your server.
 
-Fix For Error related to recent FiveM Update. Fix by @niobium Link[Link to his Error Fix Post ](https://forum.fivem.net/t/release-esx-kashacters-multi-character/251613/316?u=xxfri3ndlyxx) 
-To fix the error:
-Find in client/main.lua
-```
-Citizen.CreateThread(function()
-Citizen.Wait(7)
-if NetworkIsSessionStarted() then
-    Citizen.Wait(100)
-    TriggerServerEvent("kashactersS:SetupCharacters")
-    TriggerEvent("kashactersC:SetupCharacters")
-end
-end)
-```
-Then change it to 
-```
-Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(0)
-        if NetworkIsSessionStarted() then
-            Citizen.Wait(100)
-            TriggerServerEvent("kashactersS:SetupCharacters")
-            TriggerEvent("kashactersC:SetupCharacters")
-            return -- break the loop
-        end
-    end
-end)
-```
-
 Fix for ambulance updated by 
 [Link To His Ambulance Fix Post](https://forum.fivem.net/t/release-esx-kashacters-multi-character/251613/315?u=xxfri3ndlyxx)
-
+<br>
 In  stock esx_ambulancejob/client/main.lua lines 43 - 61
 Find 
 ```
