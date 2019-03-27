@@ -106,7 +106,31 @@ AddEventHandler('esx_ambulancejob:multicharacter', function()
 		end)
 end)
 ```
+Then change this 
+```
+function RespawnPed(ped, coords, heading)
+	SetEntityCoordsNoOffset(ped, coords.x, coords.y, coords.z, false, false, false, true)
+	NetworkResurrectLocalPlayer(coords.x, coords.y, coords.z, heading, true, false)
+	SetPlayerInvincible(ped, false)
+	TriggerEvent('playerspawned', coords.x, coords.y, coords.z)
+	ClearPedBloodDamage(ped)
 
+	ESX.UI.Menu.CloseAll()
+end
+```
+to
+```
+function RespawnPed(ped, coords, heading)
+	SetEntityCoordsNoOffset(ped, coords.x, coords.y, coords.z, false, false, false, true)
+	NetworkResurrectLocalPlayer(coords.x, coords.y, coords.z, heading, true, false)
+	SetPlayerInvincible(ped, false)
+	TriggerEvent('esx_ambulancejob:multicharacter', coords.x, coords.y, coords.z)
+	ClearPedBloodDamage(ped)
+
+	ESX.UI.Menu.CloseAll()
+end
+```
+If you do not do this last part once you repawn after death you will be frozen into place.
 <br>
 
 To fix The datastore duplicated entry download this https://github.com/XxFri3ndlyxX/esx_datastore   
