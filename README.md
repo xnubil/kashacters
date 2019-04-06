@@ -92,7 +92,7 @@ Citizen.CreateThread(function()
 	end
 end)
 ```
--I know this is not the best solution. But i don't have time to fix this the proper way. Use this quick fix or fix it properly on your own. I's something to do with isdead not being trigged properly.   
+-I know this is not the best solution. But i don't have time to fix this the proper way. Use this quick fix or fix it properly on your own. I's something to do with isdead not being trigged properly.   Also you can do the same to other menu that don't work by removing the and not isDead
 
 ## Tables (Owned & Identifier)
 - Now we edit the table and add all our identifier to make sure our character loads.
