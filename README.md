@@ -40,6 +40,8 @@ Then
 - Rename the resource to esx_kashacters
 - import the sql file in your database
 - Go to *essentialmode\client\main.lua* and edit/comment the code.
+
+
 ```
 --[[Citizen.CreateThread(function()
 	while true do
@@ -53,8 +55,11 @@ Then
 	end
 end)]]--
 ```
+
 - Now we edit the table and add all our identifier to make sure our character loads.
 - *Edit the code in esx_kashacters\server\main.lua*
+
+
 ```
 local IdentifierTables = {
     {table = "addon_account_data", column = "owner"},
@@ -71,27 +76,31 @@ local IdentifierTables = {
 	{table = "user_licenses", column = "owner"},
 }
 ```
+
 To get your identifier.
 Do this query in your database
-```
-SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = 'owned'
-```
+
+`SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = 'owned'`
+
 and
-```
-SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = 'indentifier'
-```
-<br>
+
+`SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = 'indentifier'`
+
+
 Credit @Xnubil for this query line 
 
 
 The table list provided is just an example. Yours may differ depending on what you install on your server.
 
 Once You've done all that. add start esx_kashacters to your server.cfg
---------------------------------------------------------------------------------------------------------------------------
+
 The Fix for the ambulance on the kashacter script is already implemented.  
-<br>
+
 Now all you have to do is go to your ambulance script that is up to date and 
 comment or delete
+
+
+
 ```
 --[[
 AddEventHandler('playerSpawned', function()
@@ -157,14 +166,14 @@ function RespawnPed(ped, coords, heading)
 end
 ```
 If you do not do this last part once you repawn after death you will be frozen into place.
-<br>
+
 
 To fix The datastore duplicated entry download this https://github.com/XxFri3ndlyxX/esx_datastore   
-<br>
+
 Or  
-<br>
+
 Add this code to your server/main.lua  
-<br>
+
 ```-- Fix for kashacters duplication entry --
 -- Fix was taken from this link --
 -- https://forum.fivem.net/t/release-esx-kashacters-multi-character/251613/448?u=xxfri3ndlyxx --
@@ -223,10 +232,8 @@ AddEventHandler('esx:playerLoaded', function(source)
 	xPlayer.set('dataStores', dataStores)
 end)
 ```
-<br>
-<br>
 
-> **Pay ATTENTION: You have to call the resource 'esx_kashacters' in order for the javascript to work!!!**
+> *Pay ATTENTION: You have to call the resource 'esx_kashacters' in order for the javascript to work!!!**
 
 ## How it works
 > What this script does it manipulates ESX for loading characters
