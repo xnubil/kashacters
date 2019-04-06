@@ -4,7 +4,9 @@
 **_How to install instruction._ Created By XxFri3ndlyxX**
 <br>
 - First you need a serrver that has at least the basic scripts and their requirements. 
-<br>
+
+
+
 ```
 ### [ESSENTIALS] ###
 start mysql-async
@@ -33,6 +35,7 @@ start esx_policejob
 start esx_ambulancejob
 start esx_vehicleshop
 ```
+
 <br>
 Then
 <br>
