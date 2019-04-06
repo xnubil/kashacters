@@ -1,18 +1,41 @@
 # KASHacters - ESX Multi Characters
 
-## Introduction
-
-> I've seen a lot of request to have ESX Multi Character, while working on my own framework I've made it multiple times and wanted to try it out with ESX. I tried to edit as less possible to the core of essentialmode or es_extended and it worked well :) PS. just don't mind the name...
-
-## Support
-
-> Because of the many questions I get that are different from the script I've decided to **not support** any not esx_kashacters script. Many errors are caused because of another script which might have something like 'playerJoined' as an event. There are too many different ESX scripts installed for different servers so I can't help everyone.
-
 ## Installation
 **_How to install instruction._ Created By XxFri3ndlyxX**
-
-**_How to install instruction._**
-
+<br>
+- First you need a serrver that has at least the basic scripts and their requirements. 
+<br>
+```
+### [ESSENTIALS] ###
+start mysql-async
+start essentialmode
+start esplugin_mysql
+start es_extended
+start async
+start es_ui
+start es_admin2
+start esx_kashacters
+start esx_identity
+start skinchanger
+start esx_skin
+start instance
+start esx_datastore
+start esx_addonaccount
+start esx_addoninventory
+start cron
+start esx_menu_default
+start esx_menu_list
+start esx_menu_dialog
+start esx_license
+start esx_billing
+start esx_society
+start esx_policejob
+start esx_ambulancejob
+start esx_vehicleshop
+```
+<br>
+Then
+<br>
 - Download the resource
 - Rename the resource to esx_kashacters
 - import the sql file in your database
@@ -40,7 +63,7 @@ local IdentifierTables = {
 	{table = "characters", column = "identifier"},
 	{table = "datastore_data", column = "owner"},
 	{table = "owned_vehicles", column = "owner"},
-	{table = "rented_vehicles", column = "owner"},
+    {table = "rented_vehicles", column = "owner"},
 	{table = "society_moneywash", column = "identifier"},
 	{table = "users", column = "identifier"},
     {table = "user_accounts", column = "identifier"},
@@ -51,20 +74,23 @@ local IdentifierTables = {
 To get your identifier.
 Do this query in your database
 ```
-SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = 'columnNameHere'
-``` 
-Replace columnNameHere with owner then redo it with identifier
+SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = 'owned'
+```
+and
+```
+SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = 'indentifier'
+```
+<br>
 Credit @Xnubil for this query line 
 
 
 The table list provided is just an example. Yours may differ depending on what you install on your server.
 
-Once You've done all that. add start esx_kashacters to your server.cfg and then start your server.
-If it's not working you can try clearing your cache. Now when the ui pops in. You see 4 square. If you click on one then the play or delete show on the left.  Okay hope this helps you guys get this awesome script going on your server.
-
-The Fix for the ambulance is on the kashacter side is already implemented.  
+Once You've done all that. add start esx_kashacters to your server.cfg
+--------------------------------------------------------------------------------------------------------------------------
+The Fix for the ambulance on the kashacter script is already implemented.  
 <br>
-Now all you have to do is go to your ambulance script and 
+Now all you have to do is go to your ambulance script that is up to date and 
 comment or delete
 ```
 --[[
@@ -200,46 +226,6 @@ end)
 <br>
 <br>
 
-I do not recommend this as it will mostly lead to errors.
-Character Switch Feature. Code posted by @Pattzki [Code Link](https://forum.fivem.net/t/release-esx-kashacters-multi-character/251613/298?u=xxfri3ndlyxx)
- 
-Put this line of code  in client/main.lua
-```
-RegisterCommand('switch', function()
-TriggerEvent('kashactersC:ReloadCharacters')
-end)
-```
-Then a post related to this to fix issue with skin not loading.
-Add the following code in server/main.lua
-```
-RegisterServerEvent(“kashactersS:CharacterChosen”)
-AddEventHandler(‘kashactersS:CharacterChosen’, function(charid, ischar)
-local src = source
-local spawn = {}
-SetLastCharacter(src, tonumber(charid))
-SetCharToIdentifier(GetPlayerIdentifiers(src)[1], tonumber(charid))
-if ischar == “true” then
-spawn = GetSpawnPos(src)
-TriggerClientEvent(“kashactersC:Skinchanger”, src)
-else
-TriggerClientEvent(‘skinchanger:loadDefaultModel’, src, true, cb)
-spawn = { x = -1045.31, y = -2750.69, z = 20.36 } – DEFAULT SPAWN POSITION
-end
-TriggerClientEvent(“kashactersC:SpawnCharacter”, src, spawn)
-end)
-```
-Then add this code in client/main.lua
-```
-RegisterNetEvent(‘kashactersC:Skinchanger’)
-AddEventHandler(‘kashactersC:Skinchanger’, function(source)
-local source_ = source
-ESX.TriggerServerCallback(‘esx_skin:getPlayerSkin’, function(skin, jobSkin)
-TriggerEvent(‘skinchanger:loadSkin’, skin)
-end)
-end)
-```
-This guide has been updated with all the posted fix that was posted after i made my post.
-
 > **Pay ATTENTION: You have to call the resource 'esx_kashacters' in order for the javascript to work!!!**
 
 ## How it works
@@ -249,5 +235,3 @@ So when you are choosing your character it changes your steam id which is normal
 ## Credits
 
 > ESX Framework and **KASH** AND **Onno204** for creating the resource. You can do whatever the f with it what you want but it is nice to give the main man credits ;)
-
-- LOVE KASH (Discord: KASH#0205)
