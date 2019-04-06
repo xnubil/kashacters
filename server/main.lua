@@ -3,9 +3,18 @@
 -- where identifiers are used (such as users, owned_vehicles, owned_properties etc.)
 ---------------------------------------------------------------------------------------
 local IdentifierTables = {
-    {table = "users", column = "identifier"},
-    {table = "owned_vehicles", column = "owner"},
+    {table = "addon_account_data", column = "owner"},
+	{table = "addon_inventory_items", column = "owner"},
+    {table = "billing", column = "identifier"},
+	{table = "characters", column = "identifier"},
+	{table = "datastore_data", column = "owner"},
+	{table = "owned_vehicles", column = "owner"},
+    {table = "rented_vehicles", column = "owner"},
+	{table = "society_moneywash", column = "identifier"},
+	{table = "users", column = "identifier"},
     {table = "user_accounts", column = "identifier"},
+	{table = "user_inventory", column = "identifier"},
+	{table = "user_licenses", column = "owner"},
 }
 
 RegisterServerEvent("kashactersS:SetupCharacters")
