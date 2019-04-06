@@ -58,6 +58,7 @@ Then
 	end
 end)]]--
 ```
+## Inventory Quick Fix
 - To fix the inventory not showing after death. 
 Quick fix you can do. 
 In es_extended Look for 
@@ -93,6 +94,7 @@ end)
 ```
 -I know this is not the best solution. But i don't have time to fix this the proper way. Use this quick fix or fix it properly on your own. I's something to do with isdead not being trigged properly.   
 
+## Tables (Owned & Identifier)
 - Now we edit the table and add all our identifier to make sure our character loads.
 - *Edit the code in esx_kashacters\server\main.lua*
 
@@ -131,6 +133,8 @@ The table list provided is just an example. Yours may differ depending on what y
 
 Once You've done all that. add start esx_kashacters to your server.cfg
 
+
+## Ambulance Fix
 The Fix for the ambulance on the kashacter script is already implemented.  
 
 Now all you have to do is go to your ambulance script that is up to date and 
@@ -204,13 +208,12 @@ end
 ```
 If you do not do this last part once you repawn after death you will be frozen into place.
 
-
+## Duplication Entry (Datastore)
 To fix The datastore duplicated entry download this https://github.com/XxFri3ndlyxX/esx_datastore   
 
 Or  
 
 Add this code to your server/main.lua  
-
 ```-- Fix for kashacters duplication entry --
 -- Fix was taken from this link --
 -- https://forum.fivem.net/t/release-esx-kashacters-multi-character/251613/448?u=xxfri3ndlyxx --
