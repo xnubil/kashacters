@@ -58,6 +58,40 @@ Then
 	end
 end)]]--
 ```
+- To fix the inventory not showing after death. 
+Quick fix you can do. 
+In es_extended Look for 
+
+```
+-- Menu interactions
+Citizen.CreateThread(function()
+	while true do
+
+		Citizen.Wait(0)
+
+		if IsControlJustReleased(0, Keys['F2']) and IsInputDisabled(0) and not isDead and not ESX.UI.Menu.IsOpen('default', 'es_extended', 'inventory') then
+			ESX.ShowInventory()
+		end
+
+	end
+end)
+```
+and change it to 
+```
+-- Menu interactions
+Citizen.CreateThread(function()
+	while true do
+
+		Citizen.Wait(0)
+
+		if IsControlJustReleased(0, Keys['F2']) and IsInputDisabled(0) and not ESX.UI.Menu.IsOpen('default', 'es_extended', 'inventory') then
+			ESX.ShowInventory()
+		end
+
+	end
+end)
+```
+-I know this is not the best solution. But i don't have time to fix this the proper way. Use this quick fix or fix it properly on your own. I's something to do with isdead not being trigged properly.   
 
 - Now we edit the table and add all our identifier to make sure our character loads.
 - *Edit the code in esx_kashacters\server\main.lua*
