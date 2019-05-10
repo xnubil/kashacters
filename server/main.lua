@@ -51,6 +51,10 @@ end)
 function GetPlayerCharacters(source)
     local identifier = GetIdentifierWithoutSteam(GetPlayerIdentifiers(source)[1])
     local Chars = MySQLAsyncExecute("SELECT * FROM `users` WHERE identifier LIKE '%"..identifier.."%'")
+	for i=1, #Chars, 1 do
+		charJob = MySQLAsyncExecute("SELECT * FROM `jobs` WHERE `name` = '"..Chars[i].job.."'")
+		Chars[i].job = charJob[1].label
+	end
     return Chars
 end
 
