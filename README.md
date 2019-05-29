@@ -119,7 +119,7 @@ local IdentifierTables = {
 To get your identifier.
 Do this query in your database
 
-`SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = 'owned'`
+`SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = 'owner'`
 
 and
 
