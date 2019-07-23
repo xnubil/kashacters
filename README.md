@@ -123,7 +123,7 @@ Do this query in your database
 
 and
 
-`SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = 'indentifier'`
+`SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = 'identifier'`
 
 
 Credit @Xnubil for this query line 
